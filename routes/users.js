@@ -105,6 +105,9 @@ router.patch("/verification", async (req, res) => {
     let thisEmail = req.body.email;
     let thisVerificationCode = req.body.verificationCode;
     let user = await UserModel.findOne({ email: thisEmail });
+     if (!user) {
+      return res.status(401).json({ error: "Email not found!" });
+    }
     if (user.verificationCode != thisVerificationCode) {
       return res.json("Incorrect code");
     }
