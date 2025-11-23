@@ -43,3 +43,14 @@ router.post("/", async (req, res, next) => {
 });
 
 module.exports = router;
+
+
+// {
+//   "section": 'Safety First',
+//   "answers": [
+//     { id: 1, answer: 'Yes'
+//     },
+//     { id: 2, answer: []
+//     }
+//   ]
+// }
