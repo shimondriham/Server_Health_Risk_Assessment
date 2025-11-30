@@ -10,6 +10,7 @@ router.get("/", (req, res, next) => {
   res.json({ msg: "Work from questions.js" });
 });
 
+// get all questions of the logged in user
 router.get("/myInfo", auth, async (req, res, next) => {
   try {
     let token_id = req.tokenData._id;
@@ -24,6 +25,27 @@ router.get("/myInfo", auth, async (req, res, next) => {
     return res.status(500).json(error);
   }
 });
+
+// Get the question by ID
+router.put("/thisQuestion", auth, async (req, res, next) => {
+  try {
+    let questionId = req.body.idQuestions;
+    console.log(req.body);
+    
+    let question = await QuestionModel.findOne({ _id: questionId });
+    console.log(question);
+    if (!question) {
+      return res.status(404).json({ error: "Question not found" });
+    }
+    console.log(question);
+    res.json(question);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+});
+
+
 
 
 router.post("/", auth, async (req, res) => {
