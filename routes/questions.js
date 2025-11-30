@@ -91,7 +91,7 @@ router.put("/edit", auth, async (req, res) => {
       questions[answer.id] = answer.answer;
     }
     questions.section = req.body.section;
-    if (req.body.section === 'Your Active Life') {
+    if (req.body.section === 'Your Goals') {
       questions.finished = true;
       // let user = await UserModel.findOne({ _id: questions.userId });
       // await user.save();
