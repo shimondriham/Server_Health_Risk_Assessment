@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     verification: {
         type: Boolean, default: false
     },
+    exitrisen:Array
 });
 
 exports.UserModel = mongoose.model("users", userSchema);

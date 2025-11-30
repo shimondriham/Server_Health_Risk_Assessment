@@ -123,6 +123,27 @@ router.patch("/verification", async (req, res) => {
 })
 
 
+// Update for exitrisen
+router.put("/exitrisen", auth, async (req, res) => {
+
+  try {
+    let token_id = req.tokenData._id;
+    let user = await UserModel.findOne({ _id: token_id });
+      if (!user) {
+      return res.status(401).json({ error: "user not found!" });
+    }
+    user.exitrisen =[...req.body.exitrisen] 
+    let updateData = await UserModel.updateOne(
+      { _id: token_id },
+      { $push: { exitrisen: { $each: Array.isArray(req.body.exitrisen) ? req.body.exitrisen : [req.body.exitrisen] } } }
+    );
+    res.status(200).json(updateData);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error);
+  }
+
+})
 // Update for user
 router.put("/edit", auth, async (req, res) => {
   let validBody = validUser(req.body);
