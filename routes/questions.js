@@ -10,6 +10,21 @@ router.get("/", (req, res, next) => {
   res.json({ msg: "Work from questions.js" });
 });
 
+router.get("/myInfo", auth, async (req, res, next) => {
+  try {
+    let token_id = req.tokenData._id;
+    let user = await QuestionModel.findOne({ userId: token_id });
+    if (!user) {
+      return res.status(404).json({ error: "Questions not found" });
+    }
+    console.log(user);
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+});
+
 
 router.post("/", auth, async (req, res) => {
   if (req.body.section == 'Safety First') {
@@ -19,6 +34,8 @@ router.post("/", auth, async (req, res) => {
       let user_id = decodeToken._id;
       let question = new QuestionModel();
       question.userId = user_id;
+      question.section = req.body.section;
+      
       // for (let i = 0; i < 49; i++) {
       //   question[i+1] = null;
       // }
@@ -51,6 +68,7 @@ router.put("/edit", auth, async (req, res) => {
       let answer = req.body.answers[i];
       questions[answer.id] = answer.answer;
     }
+    questions.section = req.body.section;
     if (req.body.section === 'Your Active Life') {
       questions.finished = true;
       // let user = await UserModel.findOne({ _id: questions.userId });
