@@ -13,7 +13,7 @@ router.get("/", (req, res, next) => {
 router.get("/myInfo", auth, async (req, res, next) => {
   try {
     let token_id = req.tokenData._id;
-    let user = await QuestionModel.findOne({ userId: token_id });
+    let user = await QuestionModel.find({ userId: token_id });
     if (!user) {
       return res.status(404).json({ error: "Questions not found" });
     }
