@@ -35,7 +35,7 @@ router.put("/thisQuestion", auth, async (req, res, next) => {
     let question = await QuestionModel.findOne({ _id: questionId });
     console.log(question);
     if (!question) {
-      return res.status(404).json({ error: "Question not found" });
+      return res.json("Question not found" );
     }
     console.log(question);
     res.json(question);
