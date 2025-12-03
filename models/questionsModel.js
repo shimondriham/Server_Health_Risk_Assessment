@@ -65,4 +65,3 @@ const questionSchema = new mongoose.Schema({
 });
 
 exports.QuestionModel = mongoose.model("questions", questionSchema);
-
