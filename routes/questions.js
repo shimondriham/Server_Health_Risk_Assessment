@@ -57,10 +57,6 @@ router.post("/", auth, async (req, res) => {
       let question = new QuestionModel();
       question.userId = user_id;
       question.section = req.body.section;
-      
-      // for (let i = 0; i < 49; i++) {
-      //   question[i+1] = null;
-      // }
       let answers = req.body.answers;
       for (let i = 0; i < answers.length; i++) {
         question[answers[i].id] = answers[i].answer;
@@ -93,8 +89,7 @@ router.put("/edit", auth, async (req, res) => {
     questions.section = req.body.section;
     if (req.body.section === 'Your Goals') {
       questions.finishedT1 = true;
-      // let user = await UserModel.findOne({ _id: questions.userId });
-      // await user.save();
+      questions.finished = true;
     }
     let data = await QuestionModel.updateOne({ _id: req.body.idQuestions }, questions);
     res.status(200).json(data);
@@ -108,22 +103,3 @@ router.put("/edit", auth, async (req, res) => {
 
 
 module.exports = router;
-
-
-// {
-//   "section": "Safety First",
-//   "answers": [
-//     { "id": 1, "answer": "Yes"},
-//     { "id": 2, "answer": ["Coronary artery disease","Heart failure"]}
-//   ]
-// }
-
-
-// {
-//     "idQuestions": "6923610a4e646e6150f56400",
-//     "section": "Your Active Life",
-//     "answers": [
-//         {"id": 8,"answer": ["Rarely - once or twice ever","Sometimes - a few times a year"]}
-//         {"id": 12, "answer": "Yes"},
-//     ]
-// }
