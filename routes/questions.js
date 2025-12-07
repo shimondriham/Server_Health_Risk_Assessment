@@ -92,7 +92,7 @@ router.put("/edit", auth, async (req, res) => {
     }
     questions.section = req.body.section;
     if (req.body.section === 'Your Goals') {
-      questions.finished = true;
+      questions.finishedT1 = true;
       // let user = await UserModel.findOne({ _id: questions.userId });
       // await user.save();
     }

@@ -61,6 +61,7 @@ const questionSchema = new mongoose.Schema({
     55: String,
     date_created: { type: Date, default: Date.now() },
     section: String,
+    finishedT1: { type: Boolean, default: false },
     finished: { type: Boolean, default: false },
 });
 
