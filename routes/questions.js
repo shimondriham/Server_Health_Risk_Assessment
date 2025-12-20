@@ -26,16 +26,48 @@ router.get("/myInfo", auth, async (req, res, next) => {
   }
 });
 
+// Get all questions from the selected user
+router.get("/selectedUser/:id", auth, async (req, res, next) => {
+  let ThisUser = req.params.id;
+  try {
+    let Questions = await QuestionModel.find({ userId: ThisUser });
+    if (!Questions) {
+      return res.status(404).json({ error: "Questions not found" });
+    }
+    console.log(Questions);
+    res.json(Questions);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+});
+
+// Get all the details of the selected Questions object
+router.get("/selectedQuestions/:id", auth, async (req, res, next) => {
+  let ThisQuestions = req.params.id;
+  try {
+    let Questions = await QuestionModel.findOne({ _id: ThisQuestions });
+    if (!Questions) {
+      return res.status(404).json({ error: "No questions found for this user" });
+    }
+    console.log(Questions);
+    res.json(Questions);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+});
+
 // Get the question by ID
 router.put("/thisQuestion", auth, async (req, res, next) => {
   try {
     let questionId = req.body.idQuestions;
     console.log(req.body);
-    
+
     let question = await QuestionModel.findOne({ _id: questionId });
     console.log(question);
     if (!question) {
-      return res.json("Question not found" );
+      return res.json("Question not found");
     }
     console.log(question);
     res.json(question);
