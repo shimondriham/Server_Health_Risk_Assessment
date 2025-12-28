@@ -4,10 +4,18 @@ const { QuestionModel } = require("../models/questionsModel");
 const { auth } = require("../middlewares/auth");
 const jwt = require("jsonwebtoken");
 const { UserModel } = require("../models/userModel");
+const { askAiForAnalysis, askAi } = require("../middlewares/sendToOpenAi");
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
   res.json({ msg: "Work from questions.js" });
+});
+
+
+router.get("/gpt", async (req, res, next) => {
+  let gpt = await askAi("Hello, how are you?");
+  console.log(gpt);
+  res.json(gpt);
 });
 
 // get all questions of the logged in user
@@ -122,6 +130,7 @@ router.put("/edit", auth, async (req, res) => {
     if (req.body.section === 'Your Goals') {
       questions.finishedT1 = true;
       questions.finished = true;
+      // askAiForAnalysis()
     }
     let data = await QuestionModel.updateOne({ _id: req.body.idQuestions }, questions);
     res.status(200).json(data);

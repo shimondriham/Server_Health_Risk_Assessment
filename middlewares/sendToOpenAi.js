@@ -7,7 +7,7 @@ const openai = new OpenAI({
 
 
 
-async function askAiForAnalysis(userMessage) {
+async function askAi(userMessage) {
     try {
         if (!userMessage) {
             return res
@@ -37,7 +37,7 @@ async function askAiForAnalysis(userMessage) {
     }
 }
 
-async function askAi(questionsAndAnswers) {
+async function askAiForAnalysis(questionsAndAnswers) {
     try {
         if (!questionsAndAnswers || questionsAndAnswers.length === 0) {
             return res
@@ -70,5 +70,4 @@ async function askAi(questionsAndAnswers) {
     }
 }
 
-module.exports = { askAi };
-module.exports = { askAiForAnalysis };
+module.exports = { askAiForAnalysis, askAi };
