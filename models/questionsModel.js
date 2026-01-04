@@ -1,4 +1,4 @@
-const mongoose =require("mongoose");
+const mongoose = require("mongoose");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 
@@ -59,6 +59,12 @@ const questionSchema = new mongoose.Schema({
     53: String,
     54: String,
     55: String,
+    Chair_Stand: Boolean,
+    Comfortable_Stand: Boolean,
+    Weight_Shift:[Boolean],
+    Forward_Reach: Boolean,
+    Arm_Raise: Boolean,
+    Seated_Trunk_Turn:[Boolean],
     date_created: { type: Date, default: Date.now() },
     section: String,
     finishedT1: { type: Boolean, default: false },
