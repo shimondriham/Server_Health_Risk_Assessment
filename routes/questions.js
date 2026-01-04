@@ -122,13 +122,32 @@ router.put("/edit", auth, async (req, res) => {
     if (!questions) {
       return res.status(400).json({ error: "Questions not found" });
     }
-    for (let i = 0; i < req.body.answers.length; i++) {
-      let answer = req.body.answers[i];
-      questions[answer.id] = answer.answer;
+
+    if (req.body.section == "Your Active Life" || req.body.section == "How You Feel Day to Day" || req.body.section == 'Your Goals') {
+      for (let i = 0; i < req.body.answers.length; i++) {
+        let answer = req.body.answers[i];
+        questions[answer.id] = answer.answer;
+      }
+      questions.section = req.body.section;
+
+      if (req.body.section === 'Your Goals') {
+        questions.finishedT1 = true;
+
+      }
     }
-    questions.section = req.body.section;
-    if (req.body.section === 'Your Goals') {
-      questions.finishedT1 = true;
+    if (req.body.section == "bio section") {
+      console.log("aaaa");
+      console.log(req.body.resultsData);
+      
+      questions.Chair_Stand = req.body.resultsData.Chair_Stand;
+      questions.Comfortable_Stand = req.body.resultsData.Comfortable_Stand;
+      questions.Weight_Shift[0] = req.body.resultsData.Weight_Shift.right;
+      questions.Weight_Shift[1] = req.body.resultsData.Weight_Shift.left;
+      questions.Forward_Reach = req.body.resultsData.Forward_Reach;
+      questions.Arm_Raise = req.body.resultsData.Arm_Raise;
+      questions.Seated_Trunk_Turn[0] = req.body.resultsData.Seated_Trunk_Turn.right;
+      questions.Seated_Trunk_Turn[1] = req.body.resultsData.Seated_Trunk_Turn.left;
+
       questions.finished = true;
       // askAiForAnalysis()
     }
@@ -138,7 +157,6 @@ router.put("/edit", auth, async (req, res) => {
     console.log(error);
     res.status(400).send(error);
   }
-
 })
 
 
