@@ -39,6 +39,7 @@ router.put("/gpt", async (req, res, next) => {
 
     let data = await QuestionModel.updateOne({ _id: id }, Questions);
     console.log(data);
+    console.log(Questions);
     res.json(data);
     res.json(gpt);
   } catch (error) {
