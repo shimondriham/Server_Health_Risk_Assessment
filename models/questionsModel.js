@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 
 const questionSchema = new mongoose.Schema({
     userId: String,
+    date_created: { type: Date, default: Date.now() },
+    section: String,
     1: String,
     2: String,
     3: Date,
@@ -59,14 +61,19 @@ const questionSchema = new mongoose.Schema({
     53: String,
     54: String,
     55: String,
+
     Chair_Stand: Boolean,
     Comfortable_Stand: Boolean,
     Weight_Shift:[Boolean],
     Forward_Reach: Boolean,
     Arm_Raise: Boolean,
     Seated_Trunk_Turn:[Boolean],
-    date_created: { type: Date, default: Date.now() },
-    section: String,
+
+    mobility_pain: [String],
+    cardio_readiness: [String],
+    functional_strength: [String],
+    balance_fall_risk: [String],
+    
     finishedT1: { type: Boolean, default: false },
     finished: { type: Boolean, default: false },
 });

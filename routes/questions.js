@@ -12,10 +12,39 @@ router.get("/", (req, res, next) => {
 });
 
 
-router.get("/gpt", async (req, res, next) => {
-  let gpt = await askAi("Hello, how are you?");
-  console.log(gpt);
-  res.json(gpt);
+router.put("/gpt", async (req, res, next) => {
+  let ar = req.body.ar;
+  console.log("ar:", ar);
+  let id = req.body.id;
+  try {
+    let gpt = await askAiForAnalysis(ar);
+    console.log(gpt);
+    let Questions = await QuestionModel.find({ _id: id });
+    if (!Questions) {
+      return res.status(404).json({ error: "Questions not found" });
+    }
+    Questions.cardio_readiness[0] = gpt.cards[id==cardio_readiness].status_label;
+    Questions.cardio_readiness[1] = gpt.cards[id==cardio_readiness].summary;
+    
+    Questions.functional_strength[0] = gpt.cards[2].status_label;
+    Questions.functional_strength[1] = gpt.cards[2].summary;
+
+    Questions.balance_fall_risk[0] = gpt.cards[3].status_label;
+    Questions.balance_fall_risk[1] = gpt.cards[3].summary;
+
+    Questions.mobility_pain[0] = gpt.cards[1].status_label;
+    Questions.mobility_pain[1] = gpt.cards[1].summary;
+
+    console.log("Questions to update:", Questions);
+
+    let data = await QuestionModel.updateOne({ _id: id }, Questions);
+    console.log(data);
+    res.json(data);
+    res.json(gpt);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
 });
 
 // get all questions of the logged in user
@@ -138,7 +167,7 @@ router.put("/edit", auth, async (req, res) => {
     if (req.body.section == "bio section") {
       console.log("aaaa");
       console.log(req.body.resultsData);
-      
+
       questions.Chair_Stand = req.body.resultsData.Chair_Stand;
       questions.Comfortable_Stand = req.body.resultsData.Comfortable_Stand;
       questions.Weight_Shift[0] = req.body.resultsData.Weight_Shift.right;
