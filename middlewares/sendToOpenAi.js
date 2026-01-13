@@ -202,7 +202,8 @@ Now wait for the report text. When you receive it, return the JSON only. Here is
                 },
             ],
         });
-        const results = response.choices[0].message.content.trim();
+        const results = JSON.parse(response.choices[0].message.content.trim());
+
         // console.log("results:", results);
         return results;
     } catch (error) {

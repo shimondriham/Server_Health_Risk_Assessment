@@ -15,25 +15,32 @@ router.get("/", (req, res, next) => {
 router.put("/gpt", async (req, res, next) => {
   let ar = req.body.ar;
   console.log("ar:", ar);
-  let id = req.body.id;
+  let id = req.body.idQuestions;
+ 
   try {
     let gpt = await askAiForAnalysis(ar);
     console.log(gpt);
-    let Questions = await QuestionModel.find({ _id: id });
+    // console.log(gpt.length);
+    console.log(gpt.cards);
+    let Questions = await QuestionModel.findOne({ _id: id });
+    // console.log(Questions);
+    // console.log(Questions.section);
+    // console.log(Questions.cardio_readiness);
+    
     if (!Questions) {
       return res.status(404).json({ error: "Questions not found" });
     }
-    Questions.cardio_readiness[0] = gpt.cards[id==cardio_readiness].status_label;
-    Questions.cardio_readiness[1] = gpt.cards[id==cardio_readiness].summary;
+    Questions.cardio_readiness[0] = gpt.cards[0].status_label;
+    Questions.cardio_readiness[1] = gpt.cards[0].summary;
     
-    Questions.functional_strength[0] = gpt.cards[2].status_label;
-    Questions.functional_strength[1] = gpt.cards[2].summary;
+    Questions.functional_strength[0] = gpt.cards[1].status_label;
+    Questions.functional_strength[1] = gpt.cards[1].summary;
 
-    Questions.balance_fall_risk[0] = gpt.cards[3].status_label;
-    Questions.balance_fall_risk[1] = gpt.cards[3].summary;
+    Questions.balance_fall_risk[0] = gpt.cards[2].status_label;
+    Questions.balance_fall_risk[1] = gpt.cards[2].summary;
 
-    Questions.mobility_pain[0] = gpt.cards[1].status_label;
-    Questions.mobility_pain[1] = gpt.cards[1].summary;
+    Questions.mobility_pain[0] = gpt.cards[3].status_label;
+    Questions.mobility_pain[1] = gpt.cards[3].summary;
 
     console.log("Questions to update:", Questions);
 
@@ -41,7 +48,7 @@ router.put("/gpt", async (req, res, next) => {
     console.log(data);
     console.log(Questions);
     res.json(data);
-    res.json(gpt);
+    //res.json(gpt);
   } catch (error) {
     console.log(error);
     return res.status(500).json(error);
@@ -56,7 +63,7 @@ router.get("/myInfo", auth, async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ error: "Questions not found" });
     }
-    console.log(user);
+    //console.log(user);
     res.json(user);
   } catch (error) {
     console.log(error);
@@ -100,14 +107,14 @@ router.get("/selectedQuestions/:id", auth, async (req, res, next) => {
 router.put("/thisQuestion", auth, async (req, res, next) => {
   try {
     let questionId = req.body.idQuestions;
-    console.log(req.body);
+//console.log(req.body);
 
     let question = await QuestionModel.findOne({ _id: questionId });
-    console.log(question);
+    //console.log(question);
     if (!question) {
       return res.json("Question not found");
     }
-    console.log(question);
+    //console.log(question);
     res.json(question);
   } catch (error) {
     console.log(error);
@@ -152,14 +159,15 @@ router.put("/edit", auth, async (req, res) => {
     if (!questions) {
       return res.status(400).json({ error: "Questions not found" });
     }
-
+    console.log(questions);
+    
     if (req.body.section == "Your Active Life" || req.body.section == "How You Feel Day to Day" || req.body.section == 'Your Goals') {
       for (let i = 0; i < req.body.answers.length; i++) {
         let answer = req.body.answers[i];
         questions[answer.id] = answer.answer;
       }
       questions.section = req.body.section;
-
+      console.log(questions.section);
       if (req.body.section === 'Your Goals') {
         questions.finishedT1 = true;
 
